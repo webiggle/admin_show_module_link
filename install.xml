@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Admin Show Module Link In Sidebar</name>
+    <code>admin_show_module_link</code>
+    <version>0.0.1</version>
+    <author>Webiggle Team</author>
+    <link>https://store.webiggle.com/</link>
+    <description>This will add Modules link in admin left sidebar</description>
+
+    <!-- Controller -->
+    <file path="admin/controller/common/column_left.php">
+        <operation error="skip">
+            <search index="0"><![CDATA[if ($this->user->hasPermission('access', 'marketplace/extension')) {]]></search>
+            <add position="before"><![CDATA[
+            if ($this->user->hasPermission('access', 'marketplace/extension')) {
+				$marketplace[] = array(
+					'name'	   => $this->language->get('text_module'),
+					'href'     => $this->url->link('marketplace/extension', [
+						'user_token' => $this->session->data['user_token'],
+						'type' => 'module',
+					], true),
+					'children' => array()
+				);
+			}
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Language -->
+    <file path="admin/language/*/common/column_left.php">
+        <operation>
+            <search><![CDATA[$_['text_extension']            = 'Extensions';]]></search>
+            <add position="before"><![CDATA[
+$_['text_module']               = 'Modules';
+            ]]></add>
+        </operation>
+    </file>
+</modification>
